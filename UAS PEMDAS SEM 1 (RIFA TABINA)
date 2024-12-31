@@ -1,0 +1,101 @@
+#include <iostream> // Untuk input dan output
+#include <vector>   // Untuk menyimpan daftar mahasiswa
+#include <string>   // Untuk memanipulasi string
+
+using namespace std;
+
+struct Mahasiswa {
+    string nama;
+    string nim;
+    bool hadir;
+};
+
+// Fungsi untuk menampilkan menu
+void tampilkanMenu() {
+    cout << "=== Program Absen Mahasiswa UNESA ===\n";
+    cout << "1. Tambah Mahasiswa\n";
+    cout << "2. Absen Mahasiswa\n";
+    cout << "3. Tampilkan Daftar Absen\n";
+    cout << "4. Keluar\n";
+    cout << "Pilih opsi: ";
+}
+
+// Fungsi untuk menambahkan mahasiswa ke daftar
+void tambahMahasiswa(vector<Mahasiswa>& daftarMahasiswa) {
+    Mahasiswa mhs;
+    cout << "Masukkan nama mahasiswa: ";
+    cin.ignore();
+    getline(cin, mhs.nama);
+    cout << "Masukkan NIM mahasiswa: ";
+    cin >> mhs.nim;
+    mhs.hadir = false; // Status awal mahasiswa belum hadir
+    daftarMahasiswa.push_back(mhs);
+    cout << "Mahasiswa berhasil ditambahkan!\n\n";
+}
+
+// Fungsi untuk melakukan absen mahasiswa
+void absenMahasiswa(vector<Mahasiswa>& daftarMahasiswa) {
+    string nim;
+    cout << "Masukkan NIM mahasiswa untuk absen: ";
+    cin >> nim;
+    bool ditemukan = false;
+
+    for (auto& mhs : daftarMahasiswa) {
+        if (mhs.nim == nim) {
+            mhs.hadir = true;
+            cout << "Mahasiswa " << mhs.nama << " telah diabsen.\n\n";
+            ditemukan = true;
+            break;
+        }
+    }
+
+    if (!ditemukan) {
+        cout << "Mahasiswa dengan NIM " << nim << " tidak ditemukan.\n\n";
+    }
+}
+
+// Fungsi untuk menampilkan daftar absen
+void tampilkanDaftarAbsen(const vector<Mahasiswa>& daftarMahasiswa) {
+    cout << "=== Daftar Absen Mahasiswa ===\n";
+    if (daftarMahasiswa.empty()) {
+        cout << "Belum ada mahasiswa dalam daftar.\n\n";
+        return;
+    }
+
+    for (const auto& mhs : daftarMahasiswa) {
+        cout << "Nama: " << mhs.nama << ", NIM: " << mhs.nim
+             << ", Status: " << (mhs.hadir ? "Hadir" : "Belum Hadir") << "\n";
+    }
+    cout << "\n";
+}
+
+// Fungsi utama
+int main() {
+    vector<Mahasiswa> daftarMahasiswa;
+    int pilihan;
+
+    do {
+        tampilkanMenu();
+        cin >> pilihan;
+
+        switch (pilihan) {
+            case 1:
+                tambahMahasiswa(daftarMahasiswa);
+                break;
+            case 2:
+                absenMahasiswa(daftarMahasiswa);
+                break;
+            case 3:
+                tampilkanDaftarAbsen(daftarMahasiswa);
+                break;
+            case 4:
+                cout << "Keluar dari program.\n";
+                break;
+            default:
+                cout << "Pilihan tidak valid. Coba lagi.\n\n";
+                break;
+        }
+    } while (pilihan != 4);
+
+    return 0;
+}
